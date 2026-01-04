@@ -1,0 +1,77 @@
+# OAuth token usage examples
+
+name: OAuth Slack Notifications
+
+on: [push, pull_request]
+
+jobs:
+  oauth-examples:
+    runs-on: ubuntu-latest
+    steps:
+      # OAuth with explicit token type
+      - name: OAuth Success Notification
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          token-type: 'oauth'
+          channel: '#deployments'
+          template: 'success'
+          title: 'Build Successful'
+          description: 'All tests passed and deployment completed'
+
+      # OAuth with auto-detection (token-type omitted)
+      - name: OAuth Auto-detected
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          channel: '#general'
+          template: 'info'
+          title: 'Auto-detected OAuth'
+          description: 'Token type automatically detected from xoxp- prefix'
+
+      # OAuth with custom blocks (messages appear as the authenticated user)
+      - name: OAuth Custom Block
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          channel: '#notifications'
+          blocks: |
+            [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Personal Update from ${{ github.actor }}* :wave:\n\nI just pushed some changes to the repository!"
+                }
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "This message was sent using OAuth token - it appears as me, not as a bot!"
+                  }
+                ]
+              }
+            ]
+
+      # Mixed usage - Bot and OAuth in the same workflow
+      - name: Bot Notification for Team
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          token-type: 'bot'
+          channel: '#team-notifications'
+          template: 'info'
+          title: 'Official Team Update'
+          description: 'This appears as the GitHub Actions bot'
+
+      - name: Personal OAuth Update
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          token-type: 'oauth'
+          channel: '#personal-updates'
+          template: 'info'
+          title: 'Personal Update'
+          description: 'This appears as my personal message'

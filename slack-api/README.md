@@ -15,11 +15,27 @@ A GitHub Action to send rich Slack notifications using Block Kit with pre-built 
 
 ### Basic Usage
 
+#### Bot Token (Recommended)
+
 ```yaml
 - name: Notify Slack
   uses: your-username/slack-notification-action/slack-api@v1
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    channel: '#deployments'
+    template: 'success'
+    title: 'Deployment Successful'
+    description: 'Application deployed to production'
+```
+
+#### OAuth Token
+
+```yaml
+- name: Notify Slack (OAuth)
+  uses: your-username/slack-notification-action/slack-api@v1
+  with:
+    slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+    token-type: 'oauth'
     channel: '#deployments'
     template: 'success'
     title: 'Deployment Successful'
@@ -32,7 +48,7 @@ A GitHub Action to send rich Slack notifications using Block Kit with pre-built 
 - name: Custom Slack Notification
   uses: your-username/slack-notification-action/slack-api@v1
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#general'
     blocks: |
       [
@@ -61,38 +77,77 @@ A GitHub Action to send rich Slack notifications using Block Kit with pre-built 
 
 ## Setup
 
-### 1. Create a Slack App
+This action supports both **Bot Tokens** and **OAuth Tokens**. Choose the approach that best fits your needs.
+
+### Option 1: Bot Token Setup (Recommended)
+
+#### 1. Create a Slack App
 
 1. Go to [api.slack.com/apps](https://api.slack.com/apps)
 2. Click "Create New App" → "From scratch"
 3. Enter app name and select your workspace
 4. Go to "OAuth & Permissions" in the sidebar
 
-### 2. Configure Permissions
+#### 2. Configure Bot Permissions
 
-Add these OAuth scopes to your bot:
+Add these OAuth scopes to your **bot**:
 
-- `chat:write` - Send messages
+- `chat:write` - Send messages as the bot
 - `chat:write.public` - Send messages to channels without joining
 
-### 3. Install App & Get Token
+#### 3. Install App & Get Bot Token
 
 1. Click "Install to Workspace"
-2. Copy the "Bot User OAuth Token" (starts with `xoxb-`)
+2. Copy the **"Bot User OAuth Token"** (starts with `xoxb-`)
 3. Add this token to your GitHub repository secrets as `SLACK_BOT_TOKEN`
 
-### 4. Invite Bot to Channel
+#### 4. Invite Bot to Channel
 
 Invite your bot to the channel where you want to send notifications:
 ```
 /invite @your-bot-name
 ```
 
+### Option 2: OAuth Token Setup
+
+#### 1. Create a Slack App (same as above)
+
+Follow steps 1-2 from Bot Token setup.
+
+#### 2. Configure User Permissions
+
+Add these OAuth scopes to your **user**:
+
+- `chat:write` - Send messages as the authenticated user
+- `chat:write.public` - Send messages to channels without joining
+
+#### 3. Install App & Get OAuth Token
+
+1. Click "Install to Workspace"
+2. Copy the **"User OAuth Token"** (starts with `xoxp-`)
+3. Add this token to your GitHub repository secrets as `SLACK_OAUTH_TOKEN`
+
+#### 4. Join Channels
+
+The authenticated user must be a member of the channels where notifications will be sent.
+
+### Key Differences
+
+| Feature | Bot Token (`xoxb-`) | OAuth Token (`xoxp-`) |
+|---------|--------------------|-----------------------|
+| **Message Author** | Bot user | Authenticated user |
+| **Custom Username** | ✅ Supported | ❌ Not supported |
+| **Custom Icon** | ✅ Supported | ❌ Not supported |
+| **Channel Access** | Needs invitation | User's existing access |
+| **Setup Complexity** | Medium | Low |
+| **Recommended** | ✅ Yes | For personal use |
+
 ## Inputs
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
-| `slack-bot-token` | Slack Bot Token (xoxb-...) | ✅ | - |
+| `slack-token` | Slack Token (Bot: xoxb-... or OAuth: xoxp-...) | ✅ | - |
+| `token-type` | Token type (`bot`, `oauth`, or `auto`) | ❌ | `auto` |
 | `channel` | Slack channel ID or name | ✅ | - |
 | `message` | Fallback message text | ❌ | 'GitHub Action notification' |
 | `blocks` | Custom Block Kit JSON | ❌ | - |
@@ -125,7 +180,7 @@ Invite your bot to the channel where you want to send notifications:
 - name: Success Notification
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
     template: 'success'
     title: '✅ Production Deploy Complete'
@@ -137,7 +192,7 @@ Invite your bot to the channel where you want to send notifications:
 - name: Error Notification
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#alerts'
     template: 'error'
     title: '❌ Build Failed'
@@ -149,7 +204,7 @@ Invite your bot to the channel where you want to send notifications:
 - name: Deployment Notification
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
     template: 'deployment'
     title: '🚀 Staging Deployment'
@@ -165,7 +220,7 @@ Invite your bot to the channel where you want to send notifications:
   if: failure()
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#alerts'
     template: 'error'
     title: 'Workflow Failed'
@@ -175,7 +230,7 @@ Invite your bot to the channel where you want to send notifications:
   if: success()
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
     template: 'success'
     title: 'Deployment Complete'
@@ -187,7 +242,7 @@ Invite your bot to the channel where you want to send notifications:
 - name: Notify Start
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
     template: 'info'
     title: 'Deployment Started'
@@ -198,7 +253,7 @@ Invite your bot to the channel where you want to send notifications:
 - name: Notify Complete
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
     template: 'success'
     title: 'Deployment Complete'
@@ -211,7 +266,7 @@ Invite your bot to the channel where you want to send notifications:
 - name: Advanced Custom Notification
   uses: ./slack-api
   with:
-    slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+    slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
     blocks: |
       [
@@ -308,8 +363,9 @@ Use Slack's [Block Kit Builder](https://app.slack.com/block-kit-builder) to desi
    - Use channel ID instead of name for private channels
 
 2. **"invalid_auth" error**
-   - Check that your bot token starts with `xoxb-`
+   - Check that your token is valid (starts with `xoxb-` for bot or `xoxp-` for OAuth)
    - Ensure the token has required permissions
+   - For OAuth tokens, ensure the user is a member of the target channel
 
 3. **"missing_scope" error**
    - Add required OAuth scopes to your Slack app

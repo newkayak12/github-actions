@@ -2,9 +2,13 @@ name: 'Slack Block Kit Notification'
 description: 'Send rich Slack notifications using Block Kit'
 author: 'Your Name'
 inputs:
-  slack-bot-token:
-    description: 'Slack Bot Token (xoxb-...)'
+  slack-token:
+    description: 'Slack Token (Bot Token: xoxb-... or OAuth Token: xoxp-...)'
     required: true
+  token-type:
+    description: 'Token type (bot or oauth). Auto-detected if not specified.'
+    required: false
+    default: 'auto'
   channel:
     description: 'Slack channel ID or name'
     required: true

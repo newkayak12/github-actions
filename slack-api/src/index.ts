@@ -7,7 +7,8 @@ async function run(): Promise<void> {
   try {
     // Get inputs
     const inputs: SlackNotificationInputs = {
-      slackBotToken: core.getInput('slack-bot-token', { required: true }),
+      slackToken: core.getInput('slack-token', { required: true }),
+      tokenType: core.getInput('token-type') as any || 'auto',
       channel: core.getInput('channel', { required: true }),
       message: core.getInput('message') || 'GitHub Action notification',
       blocks: core.getInput('blocks'),
@@ -22,8 +23,8 @@ async function run(): Promise<void> {
       footerIcon: core.getInput('footer-icon'),
     };
 
-    // Validate inputs
-    validateInputs(inputs);
+    // Validate inputs and detect token type
+    const tokenInfo = validateInputs(inputs);
 
     // Sanitize channel
     inputs.channel = sanitizeChannel(inputs.channel);
@@ -32,11 +33,12 @@ async function run(): Promise<void> {
     const context = getGitHubContext();
 
     core.info(`Sending Slack notification to ${inputs.channel}`);
+    core.info(`Token type: ${tokenInfo.type} (${tokenInfo.prefix})`);
     core.info(`Template: ${inputs.template}`);
     core.info(`Repository: ${context.repository}`);
 
     // Create Slack notifier and send message
-    const slackNotifier = new SlackNotifier(inputs.slackBotToken);
+    const slackNotifier = new SlackNotifier(inputs.slackToken, tokenInfo.type);
     const timestamp = await slackNotifier.sendNotification(inputs, context);
 
     // Set output
@@ -56,7 +58,5 @@ export * from './types';
 export * from './templates';
 export * from './utils';
 
-// Run if this is the main module
-if (require.main === module) {
-  run();
-}
+// Run the action
+void run();

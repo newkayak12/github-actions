@@ -1,7 +1,8 @@
 import { Block, KnownBlock } from '@slack/web-api';
 
 export interface SlackNotificationInputs {
-  slackBotToken: string;
+  slackToken: string;
+  tokenType?: 'bot' | 'oauth' | 'auto';
   channel: string;
   message?: string;
   blocks?: string;
@@ -14,6 +15,14 @@ export interface SlackNotificationInputs {
   authorIcon?: string;
   footer?: string;
   footerIcon?: string;
+}
+
+export type TokenType = 'bot' | 'oauth';
+
+export interface TokenInfo {
+  type: TokenType;
+  isValid: boolean;
+  prefix: string;
 }
 
 export interface GitHubContext {

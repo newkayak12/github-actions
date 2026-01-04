@@ -1,8 +1,8 @@
-import { GitHubContext } from './types';
+import * as github from '@actions/github';
+import { GitHubContext, TokenType, TokenInfo } from './types';
 
 export function getGitHubContext(): GitHubContext {
-  const github = require('@actions/github');
-  const context = github.context;
+  const { context } = github;
   
   return {
     actor: context.actor,
@@ -23,18 +23,60 @@ export function sanitizeChannel(channel: string): string {
   return channel.startsWith('#') ? channel : `#${channel}`;
 }
 
-export function validateInputs(inputs: any): void {
-  if (!inputs.slackBotToken) {
-    throw new Error('slack-bot-token is required');
+export function detectTokenType(token: string): TokenInfo {
+  if (token.startsWith('xoxb-')) {
+    return {
+      type: 'bot',
+      isValid: true,
+      prefix: 'xoxb-'
+    };
+  } else if (token.startsWith('xoxp-')) {
+    return {
+      type: 'oauth',
+      isValid: true,
+      prefix: 'xoxp-'
+    };
+  } else {
+    return {
+      type: 'bot', // default fallback
+      isValid: false,
+      prefix: token.substring(0, 5)
+    };
+  }
+}
+
+export function validateToken(token: string, expectedType?: TokenType): TokenInfo {
+  const tokenInfo = detectTokenType(token);
+  
+  if (!tokenInfo.isValid) {
+    throw new Error(`Invalid Slack token format. Token should start with "xoxb-" (bot) or "xoxp-" (oauth), but got "${tokenInfo.prefix}"`);
+  }
+  
+  if (expectedType && tokenInfo.type !== expectedType) {
+    throw new Error(`Expected ${expectedType} token (${expectedType === 'bot' ? 'xoxb-' : 'xoxp-'}) but got ${tokenInfo.type} token (${tokenInfo.prefix})`);
+  }
+  
+  return tokenInfo;
+}
+
+export function validateInputs(inputs: any): TokenInfo {
+  if (!inputs.slackToken) {
+    throw new Error('slack-token is required');
   }
   
   if (!inputs.channel) {
     throw new Error('channel is required');
   }
   
-  if (!inputs.slackBotToken.startsWith('xoxb-')) {
-    throw new Error('Invalid Slack bot token format. Token should start with "xoxb-"');
+  // Validate token and determine type
+  let expectedType: TokenType | undefined;
+  if (inputs.tokenType && inputs.tokenType !== 'auto') {
+    expectedType = inputs.tokenType as TokenType;
   }
+  
+  const tokenInfo = validateToken(inputs.slackToken, expectedType);
+  
+  return tokenInfo;
 }
 
 export function parseColor(color?: string): string {

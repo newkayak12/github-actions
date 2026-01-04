@@ -12,7 +12,7 @@ jobs:
       - name: Success Template
         uses: your-username/slack-notification-action/slack-api@v1
         with:
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#general'
           template: 'success'
           title: 'Tests Passed'
@@ -22,7 +22,7 @@ jobs:
       - name: Error Template
         uses: your-username/slack-notification-action/slack-api@v1
         with:
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#alerts'
           template: 'error'
           title: 'Build Failed'
@@ -32,7 +32,7 @@ jobs:
       - name: Warning Template
         uses: your-username/slack-notification-action/slack-api@v1
         with:
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#warnings'
           template: 'warning'
           title: 'Deprecated API Usage'
@@ -42,7 +42,7 @@ jobs:
       - name: Info Template
         uses: your-username/slack-notification-action/slack-api@v1
         with:
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#info'
           template: 'info'
           title: 'Code Review Ready'
@@ -52,7 +52,7 @@ jobs:
       - name: Deployment Template
         uses: your-username/slack-notification-action/slack-api@v1
         with:
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#deployments'
           template: 'deployment'
           title: 'Production Deployment'

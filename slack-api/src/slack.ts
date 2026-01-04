@@ -1,12 +1,14 @@
-import { WebClient } from '@slack/web-api';
-import { SlackNotificationInputs, GitHubContext, SlackBlocks } from './types';
+import { WebClient, ChatPostMessageArguments } from '@slack/web-api';
+import { SlackNotificationInputs, GitHubContext, SlackBlocks, TokenType } from './types';
 import { getTemplate } from './templates';
 
 export class SlackNotifier {
   private client: WebClient;
+  private tokenType: TokenType;
 
-  constructor(token: string) {
+  constructor(token: string, tokenType: TokenType) {
     this.client = new WebClient(token);
+    this.tokenType = tokenType;
   }
 
   async sendNotification(
@@ -40,13 +42,20 @@ export class SlackNotifier {
     }
 
     try {
-      const result = await this.client.chat.postMessage({
+      // Configure message options based on token type
+      const messageOptions: ChatPostMessageArguments = {
         channel: inputs.channel,
         text: inputs.message || 'GitHub Action notification',
         blocks: blocks,
-        username: 'GitHub Actions',
-        icon_emoji: ':github:',
-      });
+      };
+
+      // Bot tokens can set username and icon, OAuth tokens use the authenticated user
+      if (this.tokenType === 'bot') {
+        messageOptions.username = 'GitHub Actions';
+        messageOptions.icon_emoji = ':github:';
+      }
+
+      const result = await this.client.chat.postMessage(messageOptions);
 
       if (!result.ok) {
         throw new Error(`Slack API error: ${result.error}`);
@@ -64,13 +73,19 @@ export class SlackNotifier {
     text?: string
   ): Promise<string> {
     try {
-      const result = await this.client.chat.postMessage({
+      const messageOptions: ChatPostMessageArguments = {
         channel,
         text: text || 'Custom notification',
         blocks,
-        username: 'GitHub Actions',
-        icon_emoji: ':github:',
-      });
+      };
+
+      // Bot tokens can set username and icon, OAuth tokens use the authenticated user
+      if (this.tokenType === 'bot') {
+        messageOptions.username = 'GitHub Actions';
+        messageOptions.icon_emoji = ':github:';
+      }
+
+      const result = await this.client.chat.postMessage(messageOptions);
 
       if (!result.ok) {
         throw new Error(`Slack API error: ${result.error}`);
