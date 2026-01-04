@@ -1,0 +1,8 @@
+node_modules/
+*.log
+.env
+.DS_Store
+coverage/
+.nyc_output/
+# Keep dist/ for GitHub Actions deployment
+!dist/

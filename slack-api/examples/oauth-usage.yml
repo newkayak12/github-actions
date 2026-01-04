@@ -10,7 +10,7 @@ jobs:
     steps:
       # OAuth with explicit token type
       - name: OAuth Success Notification
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           token-type: 'oauth'
@@ -21,7 +21,7 @@ jobs:
 
       # OAuth with auto-detection (token-type omitted)
       - name: OAuth Auto-detected
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           channel: '#general'
@@ -31,7 +31,7 @@ jobs:
 
       # OAuth with custom blocks (messages appear as the authenticated user)
       - name: OAuth Custom Block
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           channel: '#notifications'
@@ -57,7 +57,7 @@ jobs:
 
       # Mixed usage - Bot and OAuth in the same workflow
       - name: Bot Notification for Team
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           token-type: 'bot'
@@ -67,7 +67,7 @@ jobs:
           description: 'This appears as the GitHub Actions bot'
 
       - name: Personal OAuth Update
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           token-type: 'oauth'

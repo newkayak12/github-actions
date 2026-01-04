@@ -10,7 +10,7 @@ jobs:
     steps:
       # Success notification
       - name: Success Template
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#general'
@@ -20,7 +20,7 @@ jobs:
 
       # Error notification
       - name: Error Template
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#alerts'
@@ -30,7 +30,7 @@ jobs:
 
       # Warning notification
       - name: Warning Template
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#warnings'
@@ -40,7 +40,7 @@ jobs:
 
       # Info notification
       - name: Info Template
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#info'
@@ -50,7 +50,7 @@ jobs:
 
       # Deployment notification
       - name: Deployment Template
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#deployments'

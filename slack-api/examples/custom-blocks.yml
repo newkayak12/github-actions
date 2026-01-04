@@ -10,7 +10,7 @@ jobs:
     steps:
       # Simple custom block
       - name: Simple Custom Block
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#general'
@@ -27,7 +27,7 @@ jobs:
 
       # Rich deployment notification
       - name: Rich Deployment Block
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#deployments'
@@ -108,7 +108,7 @@ jobs:
 
       # Test results with conditional styling
       - name: Test Results Block
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#testing'
@@ -166,7 +166,7 @@ jobs:
       # Pull request notification
       - name: Pull Request Block
         if: github.event_name == 'pull_request'
-        uses: your-username/slack-notification-action/slack-api@v1
+        uses: newkayak12/github-actions/slack-api@main
         with:
           slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel: '#code-review'

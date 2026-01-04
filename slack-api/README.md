@@ -19,7 +19,7 @@ A GitHub Action to send rich Slack notifications using Block Kit with pre-built 
 
 ```yaml
 - name: Notify Slack
-  uses: your-username/slack-notification-action/slack-api@v1
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
@@ -32,7 +32,7 @@ A GitHub Action to send rich Slack notifications using Block Kit with pre-built 
 
 ```yaml
 - name: Notify Slack (OAuth)
-  uses: your-username/slack-notification-action/slack-api@v1
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
     token-type: 'oauth'
@@ -46,7 +46,7 @@ A GitHub Action to send rich Slack notifications using Block Kit with pre-built 
 
 ```yaml
 - name: Custom Slack Notification
-  uses: your-username/slack-notification-action/slack-api@v1
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#general'
@@ -178,7 +178,7 @@ The authenticated user must be a member of the channels where notifications will
 #### Success Template
 ```yaml
 - name: Success Notification
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
@@ -190,7 +190,7 @@ The authenticated user must be a member of the channels where notifications will
 #### Error Template
 ```yaml
 - name: Error Notification
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#alerts'
@@ -202,7 +202,7 @@ The authenticated user must be a member of the channels where notifications will
 #### Deployment Template
 ```yaml
 - name: Deployment Notification
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
@@ -218,7 +218,7 @@ The authenticated user must be a member of the channels where notifications will
 ```yaml
 - name: Notify on Failure
   if: failure()
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#alerts'
@@ -228,7 +228,7 @@ The authenticated user must be a member of the channels where notifications will
 
 - name: Notify on Success
   if: success()
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
@@ -240,7 +240,7 @@ The authenticated user must be a member of the channels where notifications will
 
 ```yaml
 - name: Notify Start
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
@@ -251,7 +251,7 @@ The authenticated user must be a member of the channels where notifications will
 # ... your deployment steps ...
 
 - name: Notify Complete
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
@@ -264,7 +264,7 @@ The authenticated user must be a member of the channels where notifications will
 
 ```yaml
 - name: Advanced Custom Notification
-  uses: ./slack-api
+  uses: newkayak12/github-actions/slack-api@main
   with:
     slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
     channel: '#deployments'
