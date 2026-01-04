@@ -1,0 +1,55 @@
+name: 'Slack Block Kit Notification'
+description: 'Send rich Slack notifications using Block Kit'
+author: 'Your Name'
+inputs:
+  slack-bot-token:
+    description: 'Slack Bot Token (xoxb-...)'
+    required: true
+  channel:
+    description: 'Slack channel ID or name'
+    required: true
+  message:
+    description: 'Message text (fallback for notifications)'
+    required: false
+    default: 'GitHub Action notification'
+  blocks:
+    description: 'JSON string of Slack Block Kit blocks'
+    required: false
+  template:
+    description: 'Pre-defined template (success, error, warning, info, deployment)'
+    required: false
+    default: 'info'
+  title:
+    description: 'Title for the notification (used with templates)'
+    required: false
+  description:
+    description: 'Description text (used with templates)'
+    required: false
+  color:
+    description: 'Color for the notification (good, warning, danger, or hex color)'
+    required: false
+    default: '#36a64f'
+  author-name:
+    description: 'Author name to display'
+    required: false
+  author-link:
+    description: 'Link for the author'
+    required: false
+  author-icon:
+    description: 'Icon URL for the author'
+    required: false
+  footer:
+    description: 'Footer text'
+    required: false
+  footer-icon:
+    description: 'Footer icon URL'
+    required: false
+outputs:
+  message-timestamp:
+    description: 'Timestamp of the sent message'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+branding:
+  icon: 'message-circle'
+  color: 'purple'

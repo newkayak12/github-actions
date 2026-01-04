@@ -1,0 +1,59 @@
+# Basic usage examples for the Slack notification action
+
+name: Basic Slack Notifications
+
+on: [push, pull_request]
+
+jobs:
+  basic-templates:
+    runs-on: ubuntu-latest
+    steps:
+      # Success notification
+      - name: Success Template
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#general'
+          template: 'success'
+          title: 'Tests Passed'
+          description: 'All unit tests completed successfully'
+
+      # Error notification
+      - name: Error Template
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#alerts'
+          template: 'error'
+          title: 'Build Failed'
+          description: 'Something went wrong during the build process'
+
+      # Warning notification
+      - name: Warning Template
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#warnings'
+          template: 'warning'
+          title: 'Deprecated API Usage'
+          description: 'Found usage of deprecated APIs in the codebase'
+
+      # Info notification
+      - name: Info Template
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#info'
+          template: 'info'
+          title: 'Code Review Ready'
+          description: 'Pull request is ready for review'
+
+      # Deployment notification
+      - name: Deployment Template
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#deployments'
+          template: 'deployment'
+          title: 'Production Deployment'
+          description: 'Version 2.1.0 deployed to production'

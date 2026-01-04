@@ -1,0 +1,230 @@
+# Custom Block Kit examples
+
+name: Custom Block Notifications
+
+on: [push]
+
+jobs:
+  custom-blocks:
+    runs-on: ubuntu-latest
+    steps:
+      # Simple custom block
+      - name: Simple Custom Block
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#general'
+          blocks: |
+            [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Hello from GitHub Actions!* :wave:"
+                }
+              }
+            ]
+
+      # Rich deployment notification
+      - name: Rich Deployment Block
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#deployments'
+          blocks: |
+            [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":rocket: Production Deployment"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "A new version has been deployed to production!"
+                },
+                "accessory": {
+                  "type": "image",
+                  "image_url": "https://github.com/${{ github.actor }}.png?size=32",
+                  "alt_text": "deployer"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Environment:*\nProduction"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Version:*\n${{ github.sha }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Deployed by:*\n${{ github.actor }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Branch:*\n${{ github.ref_name }}"
+                  }
+                ]
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": ":eyes: View Deployment"
+                    },
+                    "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                    "style": "primary"
+                  },
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": ":globe_with_meridians: Visit App"
+                    },
+                    "url": "https://your-app.com"
+                  }
+                ]
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": ":clock1: Deployed at <!date^${Math.floor(Date.now()/1000)}^{date_short} at {time}|now>"
+                  }
+                ]
+              }
+            ]
+
+      # Test results with conditional styling
+      - name: Test Results Block
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#testing'
+          blocks: |
+            [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": ":test_tube: Test Results"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Repository:* <https://github.com/${{ github.repository }}|${{ github.repository }}>\n*Branch:* ${{ github.ref_name }}\n*Commit:* <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Tests Passed:*\n:white_check_mark: 42"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Tests Failed:*\n:x: 0"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Coverage:*\n:bar_chart: 95%"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Duration:*\n:stopwatch: 2m 34s"
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": ":information_source: All tests passed successfully!"
+                  }
+                ]
+              }
+            ]
+
+      # Pull request notification
+      - name: Pull Request Block
+        if: github.event_name == 'pull_request'
+        uses: your-username/slack-notification-action/slack-api@v1
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#code-review'
+          blocks: |
+            [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":memo: *New Pull Request*\n<${{ github.event.pull_request.html_url }}|${{ github.event.pull_request.title }}>"
+                },
+                "accessory": {
+                  "type": "image",
+                  "image_url": "${{ github.event.pull_request.user.avatar_url }}",
+                  "alt_text": "${{ github.event.pull_request.user.login }}"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Author:*\n${{ github.event.pull_request.user.login }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Base Branch:*\n${{ github.event.pull_request.base.ref }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Head Branch:*\n${{ github.event.pull_request.head.ref }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Changes:*\n+${{ github.event.pull_request.additions }} -${{ github.event.pull_request.deletions }}"
+                  }
+                ]
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": ":eyes: Review PR"
+                    },
+                    "url": "${{ github.event.pull_request.html_url }}",
+                    "style": "primary"
+                  },
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": ":file_folder: View Files"
+                    },
+                    "url": "${{ github.event.pull_request.html_url }}/files"
+                  }
+                ]
+              }
+            ]
