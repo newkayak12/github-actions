@@ -25,11 +25,6 @@ export function createSuccessTemplate(
       text: {
         type: 'mrkdwn',
         text: `*${title}*\n${description}`
-      },
-      accessory: {
-        type: 'image',
-        image_url: 'https://raw.githubusercontent.com/primer/octicons/main/icons/check-circle-24.svg',
-        alt_text: 'Success'
       }
     },
     {
@@ -57,11 +52,6 @@ export function createErrorTemplate(
       text: {
         type: 'mrkdwn',
         text: `*${title}*\n${description}`
-      },
-      accessory: {
-        type: 'image',
-        image_url: 'https://raw.githubusercontent.com/primer/octicons/main/icons/x-circle-24.svg',
-        alt_text: 'Error'
       }
     },
     {
@@ -103,11 +93,6 @@ export function createWarningTemplate(
       text: {
         type: 'mrkdwn',
         text: `*${title}*\n${description}`
-      },
-      accessory: {
-        type: 'image',
-        image_url: 'https://raw.githubusercontent.com/primer/octicons/main/icons/alert-24.svg',
-        alt_text: 'Warning'
       }
     },
     {
@@ -162,11 +147,6 @@ export function createDeploymentTemplate(
       text: {
         type: 'mrkdwn',
         text: `*${title}*\n${description}`
-      },
-      accessory: {
-        type: 'image',
-        image_url: 'https://raw.githubusercontent.com/primer/octicons/main/icons/rocket-24.svg',
-        alt_text: 'Deployment'
       }
     },
     {

@@ -8,11 +8,11 @@ jobs:
   oauth-examples:
     runs-on: ubuntu-latest
     steps:
-      # OAuth with explicit token type
+      # OAuth with explicit token type (requires xoxp- token)
       - name: OAuth Success Notification
         uses: newkayak12/github-actions/slack-api@main
         with:
-          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}  # Must be xoxp- token!
           token-type: 'oauth'
           channel: '#deployments'
           template: 'success'

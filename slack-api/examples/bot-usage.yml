@@ -1,0 +1,40 @@
+# Bot token usage examples
+
+name: Bot Token Slack Notifications
+
+on: [push, pull_request]
+
+jobs:
+  bot-examples:
+    runs-on: ubuntu-latest
+    steps:
+      # Bot token with explicit token type
+      - name: Bot Success Notification
+        uses: newkayak12/github-actions/slack-api@main
+        with:
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}  # Must be xoxb- token!
+          token-type: 'bot'
+          channel: '#deployments'
+          template: 'success'
+          title: 'Build Successful'
+          description: 'All tests passed and deployment completed'
+
+      # Bot token with auto-detection (recommended)
+      - name: Bot Auto-detected
+        uses: newkayak12/github-actions/slack-api@main
+        with:
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}  # xoxb- auto-detected as bot
+          channel: '#general'
+          template: 'info'
+          title: 'Auto-detected Bot Token'
+          description: 'Token type automatically detected from xoxb- prefix'
+
+      # Bot with custom username and icon
+      - name: Bot Custom Styling
+        uses: newkayak12/github-actions/slack-api@main
+        with:
+          slack-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: '#notifications'
+          template: 'deployment'
+          title: 'Custom Bot Message'
+          description: 'This message shows as GitHub Actions bot with custom icon'
